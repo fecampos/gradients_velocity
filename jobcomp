@@ -1,0 +1,17 @@
+#!/bin/bash
+
+NETCDFLIB="-L/usr/lib/x86_64-linux-gnu -lnetcdf -lnetcdff"
+
+NETCDFINC="-I/usr/include"
+
+CPP1="-cpp -O3 -march=native -ffpe-trap=zero -mcmodel=medium -traditional -DLinux -openmp"
+
+export OMP_NUM_THREADS=2
+
+#gfortran $CPP1 param.f90 distances.f90 hor_gradient.f90 gsw_distance.f90 write_outputs.f90 main_program.f90 -o result $NETCDFLIB $NETCDFINC
+
+gfortran $CPP1 param.f90 distances.f90 hor_gradient.f90 gsw_distance.f90 write_outputs.f90 main_program.f90 -o result $NETCDFLIB $NETCDFINC
+
+./result $OMP_NUM_THREADS
+
+rm result *.mod
